@@ -1,26 +1,54 @@
 import Title from "../components/Title";
 import { webDev, softwares } from "../db";
 import mainStyle from "../styles/Main.module.css";
+import { motion } from "framer-motion";
+import {
+  skillListAnimation,
+  skillAnimation,
+  skillListAnimationItem,
+  skillAnimationItem,
+} from "../components/Animation";
 const skills = () => {
   return (
     <section>
       <div className="container">
         <Title title={"my skills"} />
-        <main className={mainStyle.main}>
-          <h4>web develompent</h4>
-          <ul>
+        <motion.main
+          variants={skillAnimation}
+          initial="hidden"
+          animate="visible"
+          className={mainStyle.main}
+        >
+          <motion.h4 variants={skillAnimationItem}>web develompent</motion.h4>
+          <motion.ul
+            variants={skillListAnimation}
+            initial="hidden"
+            animate="visible"
+          >
             {webDev.map((dev) => {
-              return <li key={dev.id}>{dev.name}</li>;
+              return (
+                <motion.li variants={skillListAnimationItem} key={dev.id}>
+                  {dev.name}
+                </motion.li>
+              );
             })}
-          </ul>
-          <h4>softwares</h4>
-          <ul>
+          </motion.ul>
+          <motion.h4 variants={skillAnimationItem}>softwares</motion.h4>
+          <motion.ul
+            variants={skillAnimationItem,skillListAnimation}
+            initial="hidden"
+            animate="visible"
+          >
             {softwares.map((soft) => {
-              return <li key={soft.id}>{soft.name}</li>;
+              return (
+                <motion.li variants={skillListAnimationItem} key={soft.id}>
+                  {soft.name}
+                </motion.li>
+              );
             })}
-          </ul>
+          </motion.ul>
           ;
-        </main>
+        </motion.main>
       </div>
     </section>
   );
