@@ -15,6 +15,7 @@ const contact = () => {
               name="name"
               placeholder="Your Name"
               id="yourname"
+              
             />
             <input
               type="email"
