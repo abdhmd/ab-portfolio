@@ -106,7 +106,7 @@ const Work = ({ works }) => {
                 </div>
               </div>
               <div className={workStyle.date}>
-                <h4>date</h4>
+                <h4>date pushed</h4>
 
                 <p>{dateText}</p>
               </div>
