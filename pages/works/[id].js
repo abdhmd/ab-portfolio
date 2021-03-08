@@ -4,29 +4,34 @@ import Link from "next/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function  getStaticProps({ params: { id } }) {
-  console.log(id);
+export const getStaticProps = async (context) => {
+  const id = context.params.id;
   const res = await fetch(`${API_URL}/works/${id}`);
   const data = await res.json();
+
 
   return {
     props: {
       work: data,
     },
   };
-}
+};
 
-export async function getStaticPaths() {
+export const getStaticPaths = async () => {
   const work_res = await fetch(`${API_URL}/works/`);
   const works = await work_res.json();
 
-  return {
-    paths: works.map((work) => ({
+  const paths = works.map((work) => {
+    return {
       params: { id: work.id.toString() },
-    })),
+    };
+  });
+
+  return {
+    paths,
     fallback: false,
   };
-}
+};
 
 const Work = ({ work }) => {
   return (
