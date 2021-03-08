@@ -4,60 +4,29 @@ import Link from "next/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// export async function getStaticProps({ params: { id } }) {
-//   const client = new ApolloClient({
-//     uri: `${API_URL}/graphql`,
-//     cache: new InMemoryCache(),
-//   });
+export async function getStaticPaths() {
+  const work_res = await fetch(`${API_URL}/works/`);
+  const works = await work_res.json();
 
-//   const { data } = await client.query({
-//     query: gql`
-//       query {
-//         works (where:{id: ${id}}){
-//           id
-//           title
-//           description
-//           date
-//           code_source
-//           view_work
-//           image {
-//             id
-//             url
-//           }
-//         }
-//       }
-//     `,
-//   });
+  return {
+    paths: works.map((work) => ({
+      params: { id: work.id.toString() },
+    })),
+    fallback: false,
+  };
+}
 
-//   return {
-//     props: {
-//       works: data.works,
-//     },
-//   };
-// }
+export async function getStaticProps({ params: { id } }) {
+  console.log(id);
+  const res = await fetch(`${API_URL}/works/${id}`);
+  const data = await res.json();
 
-// export async function getStaticPaths() {
-//   const client = new ApolloClient({
-//     uri: `${API_URL}/graphql`,
-//     cache: new InMemoryCache(),
-//   });
-
-//   const { data } = await client.query({
-//     query: gql`
-//       query {
-//         works {
-//           id
-//         }
-//       }
-//     `,
-//   });
-//   return {
-//     paths: data.works.map((el) => ({
-//       params: { id: el.id },
-//     })),
-//     fallback: false,
-//   };
-// }
+  return {
+    props: {
+      work: data, 
+    },
+  };
+}
 
 const Work = ({ work }) => {
   return (
@@ -108,31 +77,5 @@ const Work = ({ work }) => {
     </section>
   );
 };
-
-export async function getStaticProps({ params: { id } }) {
-  console.log(id);
-  const res = await fetch(`${API_URL}/works/${id}`);
-  const data = await res.json();
-
-
-  return {
-    props: {
-      work: data, //Because the API response for filters is an array
-    },
-  };
-}
-
-export async function getStaticPaths() {
-  //Retrieve all the possible paths
-  const work_res = await fetch(`${API_URL}/works/`);
-  const works = await work_res.json();
-  //Return them to NextJS context
-  return {
-    paths: works.map((work) => ({
-      params: { id: work.id.toString() },
-    })),
-    fallback: false, //Tells to nextjs to show a 404 if the param is not matched
-  };
-}
 
 export default Work;
