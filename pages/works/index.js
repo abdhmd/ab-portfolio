@@ -1,39 +1,54 @@
 import Link from "next/link";
 import Title from "../../components/Title";
 import workStyle from "../../styles/Works.module.css";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+// import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+
+
 export async function getStaticProps() {
-  const client = new ApolloClient({
-    uri: `${API_URL}/graphql`,
-    cache: new InMemoryCache(),
-  });
+  //Fetch the products
+  const work_res = await fetch(`${API_URL}/works/`)
+  const works = await work_res.json()
 
-  const { data } = await client.query({
-    query: gql`
-      query {
-        works {
-          id
-          title
-          image {
-            id
-            url
-          }
-        }
-      }
-    `,
-  });
-
-  console.log(data);
-
+  //Return the products as props
   return {
     props: {
-      works: data.works,
-    },
-  };
+      works
+    }
+  }
 }
+
+// export async function getStaticProps() {
+//   const client = new ApolloClient({
+//     uri: `${API_URL}/graphql`,
+//     cache: new InMemoryCache(),
+//   });
+
+//   const { data } = await client.query({
+//     query: gql`
+//       query {
+//         works {
+//           id
+//           title
+//           image {
+//             id
+//             url
+//           }
+//         }
+//       }
+//     `,
+//   });
+
+//   console.log(data);
+
+//   return {
+//     props: {
+//       works: data.works,
+//     },
+//   };
+// }
 
 const Works = ({ works }) => {
   return (
