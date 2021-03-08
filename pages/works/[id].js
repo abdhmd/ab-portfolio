@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function  getServerSideProps({ params: { id } }) {
+export async function  getStaticProps({ params: { id } }) {
   console.log(id);
   const res = await fetch(`${API_URL}/works/${id}`);
   const data = await res.json();
